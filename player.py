@@ -2,6 +2,7 @@ import pygame
 import random
 from utils import Colors, GameParameters
 import os 
+import numpy as np
 
 class Player:
     def __init__(self):
@@ -15,19 +16,27 @@ class Player:
         self.drawer = PlayerDrawer()
         self.is_hide = False
         self.height = GameParameters.PLAYER_STAND_HEIGHT
+        self.action_space = 3
+        self.observation_player_space = 2
         
     def move(self, action):
         if self.relativePosY > 0:
             self.jump()
             return
-        if action == 1:
+        if action[0] == 1:
             self.jump()
             return
-        if action == -1:
+        elif action[1] == 1:
             self.hide()
         else :
             # self.height = GameParameters.PLAYER_STAND_HEIGHT
             self.is_hide = False
+            
+    def get_actions(self):
+            return [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        
+    def get_state(self):
+        return np.array([self.posY / (GameParameters.HEIGHT), (self.posX + self.width) / GameParameters.WIDTH])
         
     def jump(self):
         self.t_jump += 1

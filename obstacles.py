@@ -1,6 +1,7 @@
 import pygame
 import random
 from utils import Colors, GameParameters
+import numpy as np
 
 
 class Bird():
@@ -9,6 +10,9 @@ class Bird():
         self.width = GameParameters.BIRD_WIDTH
         self.height = GameParameters.BIRD_HEIGHT
         self.posY = GameParameters.FLOOR_HEIGHT + self.height
+        
+    def get_state_one_obstacle(self):
+        return (self.posX / (GameParameters.WIDTH), self.posY / GameParameters.HEIGHT)
         
     def move(self, speed):
         self.posX -= speed
@@ -39,6 +43,9 @@ class Rock():
         self.height = GameParameters.ROCK_HEIGHT
         self.posY = GameParameters.FLOOR_HEIGHT + self.height
         
+    def get_state_one_obstacle(self):
+        return (self.posX / (GameParameters.WIDTH), self.posY / GameParameters.HEIGHT)
+        
     def move(self, speed):
         self.posX -= speed
         
@@ -64,6 +71,17 @@ class Obstacles():
         self.listObstacles = []
         self.lastCreationTime = 0
         self.obstacles_killed = 0
+        self.observation_obstacles_space = 4
+        
+    def get_state(self):
+        state = np.ones(self.observation_obstacles_space)
+        i = 0
+        while i < len(self.listObstacles) and i < 2:
+            current_obstacle_state = self.listObstacles[i].get_state_one_obstacle()
+            state[2*i] = current_obstacle_state[0]
+            state[2*i+1] = current_obstacle_state[1]
+            i += 1
+        return state
         
     def move(self, speed):
         for obstacle in self.listObstacles:

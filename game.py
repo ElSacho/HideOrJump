@@ -14,7 +14,7 @@ class Game:
         self.screen = pygame.display.set_mode((GameParameters.WIDTH, GameParameters.HEIGHT))
         pygame.display.set_caption('Hide or Jump')
         self.clock = pygame.time.Clock()
-        self.police = pygame.font.Font("arial.ttf", 28)
+        self.police = pygame.font.Font("assets/arial.ttf", 28)
         
         self.floor = Floor()
         self.player = Player()
@@ -32,11 +32,11 @@ class Game:
         keys = pygame.key.get_pressed()  # Obtenir l'état des touches
 
         if keys[pygame.K_DOWN]:
-            action = -1
+            action = [0,1,0]
         elif keys[pygame.K_UP]:
-            action = 1
+            action = [1,0,0]
         else:
-            action = 0
+            action = [0,0,1]
         
         self.update_speed()
         self.player.move(action)

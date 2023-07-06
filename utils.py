@@ -28,6 +28,7 @@ class GameParameters:
     BLOCK_SIZE = 20
     SPEED = 25
     INITIAL_SPEED = 20
+    MAX_SPEED = 50
     
     # Screen parameters
     WIDTH = 680
