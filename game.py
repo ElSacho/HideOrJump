@@ -43,11 +43,11 @@ class Game:
         
         self.obstacles.update(self.speed)
         
+        gameOver = self.player.isCollision(self.obstacles)
+        
         self.draw()
         self.clock.tick(GameParameters.SPEED)
         
-        gameOver = self.player.isCollision(self.obstacles)
-
         return gameOver
             
     def draw(self):
