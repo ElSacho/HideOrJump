@@ -26,7 +26,9 @@ class Colors:
 class GameParameters:
     # General parameters
     BLOCK_SIZE = 20
-    SPEED = 25
+    SPEED = 60
+    
+    # Speed in the game
     INITIAL_SPEED = 20
     MAX_SPEED = 50
     
@@ -55,3 +57,12 @@ class GameParameters:
     
     # Animation
     TIME_PER_FRAME = 2
+    
+class GeneticAgentParameters:
+    HIDDEN_SIZE = 24
+    GENERATION_SIZE = 100
+    
+    GOAL_SCORE = 50
+    MAX_GEN_NUMBER = 200
+    
+    GENETIC_PATH = '/Users/potosacho/Desktop/Projets/AI/Moi/HideOrJump/genetic_nn'

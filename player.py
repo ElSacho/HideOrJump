@@ -1,7 +1,7 @@
 import pygame
 import random
 from utils import Colors, GameParameters
-import os 
+import os
 import numpy as np
 
 class Player:
@@ -56,6 +56,9 @@ class Player:
         pygame.draw.rect(screen, Colors.RED, (self.posX, GameParameters.HEIGHT - self.posY - self.height, self.width,  self.height ))
         self.drawer.draw(self, screen)
     
+    def update_size(self):
+        self.drawer.update_size(self)
+    
     def draw2(self, screen):
         pygame.draw.rect(screen, Colors.RED, (self.posX, GameParameters.HEIGHT - self.posY - self.height, self.width,  self.height ))
         #  [left, top, width, height]
@@ -83,6 +86,37 @@ class PlayerDrawer:
         self.images_down = [pygame.image.load(os.path.join(folder_down, file)) 
                    for file in sorted(os.listdir(folder_down)) 
                    if file.endswith('.png')]
+    
+    def update_size(self, player):
+        if not player.is_hide:
+            if not self.actual_animation == 'run':
+                self.actual_animation = 'run'
+                self.animation_time = 0
+                self.current_frame_timer = 0
+            player.height = self.images_run[self.animation_time].get_rect().height
+            player.width = self.images_run[self.animation_time].get_rect().width
+            
+            if player.relativePosY == 0:
+                self.current_frame_timer += 1
+                if self.current_frame_timer == GameParameters.TIME_PER_FRAME:
+                    self.current_frame_timer = 0
+                    self.animation_time += 1
+                    self.animation_time = self.animation_time % len(self.images_run)
+        else :
+            if not self.actual_animation == 'down':
+                self.actual_animation = 'down'
+                self.animation_time = 0
+                self.current_frame_timer = 0
+            player.height = self.images_down[self.animation_time].get_rect().height
+            player.width = self.images_down[self.animation_time].get_rect().width
+            
+            self.current_frame_timer += 1
+            if self.current_frame_timer == GameParameters.TIME_PER_FRAME:
+                self.current_frame_timer = 0
+                self.animation_time += 1
+                self.animation_time = self.animation_time % len(self.images_down)
+                    
+    
     
     def draw(self, player, screen):
         if not player.is_hide:

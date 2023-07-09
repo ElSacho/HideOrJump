@@ -23,8 +23,6 @@ class Bird():
         # Si les deux objets se supperposent, on regarde la hauteur
         if not self.posX + self.width < player.posX :
             if player.posY + player.height > self.posY:
-                print("Player : ", player.posY + player.height )
-                print("Box : ", self.posY)
                 return True
         return False
         
@@ -55,8 +53,6 @@ class Rock():
         # Si les deux objets se supperposent, on regarde la hauteur
         if not self.posX + self.width < player.posX :
             if player.posY < self.posY:
-                print("Player : ",player.posY)
-                print("Box : ",self.posY)
                 return True
         return False
         

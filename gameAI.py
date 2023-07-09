@@ -29,7 +29,7 @@ class GameAI:
         if self.speed < GameParameters.MAX_SPEED :
             self.speed +=0.01
         
-    def step(self, action):        
+    def step(self, action, draw=True):        
         self.update_speed()
         self.player.move(action)
         
@@ -43,10 +43,13 @@ class GameAI:
         if game_over:
             reward = -1
         
+        if draw:
+            self.draw()
+            self.clock.tick(GameParameters.SPEED)
+        else :
+            self.player.update_size()
+            
         next_state = self.get_state()
-        
-        self.draw()
-        self.clock.tick(GameParameters.SPEED)
         
         return next_state, reward, game_over, {}
     
@@ -71,9 +74,7 @@ class GameAI:
             
     def draw(self):
         self.screen.fill(Colors.BACKGROUND_COLOR)
-        
-        # pygame.draw.rect(self.screen, Colors.BLACK, (0, 200, GameParameters.WIDTH, GameParameters.HEIGHT))
-        
+                
         self.floor.draw(self.screen)
         self.obstacles.draw(self.screen)
         self.player.draw(self.screen)
@@ -83,10 +84,6 @@ class GameAI:
         pygame.display.flip()
         pygame.display.update()
         
-        # text = font.render("Score: " + str(self.score), True, Colors.BLACK)
-        # self.display.blit(text, [0, 0])
-        # pygame.display.flip()
-        
     def draw_score(self):
         # Afficher le texte    
         self.screen.blit(self.police.render(f'Score : {self.score}', True, Colors.POLICE_COLOR), (50,50))
@@ -94,6 +91,7 @@ class GameAI:
     def draw_state(self):
         np.set_printoptions(precision=2)
         self.screen.blit(self.police.render(f'State : {self.state}', True, Colors.POLICE_COLOR), (50,30))
+        
         
 if __name__ == '__main__':
     pygame.init()
