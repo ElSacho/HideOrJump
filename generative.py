@@ -11,7 +11,7 @@ import os
 from tqdm import tqdm 
 import cv2
 
-class GenerationManger():
+class GenerationManager():
     def __init__(self, game):
         self.generation_number = 0
         self.score_goal = gen.GOAL_SCORE
@@ -215,7 +215,7 @@ if __name__ == "__main__":
     
     game = GameAI()
     
-    generation_manager = GenerationManger(game)
+    generation_manager = GenerationManager(game)
     
     # generation_manager.train()
     
