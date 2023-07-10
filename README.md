@@ -66,4 +66,4 @@ To be able to compare each agent effectively, we make them all play on the same 
 
 The number of generations required for our algorithm to work is highly variable, but it generally takes less than 80 generations. The result is very positive. You can record the gameplay of an agent by modifying the RENDER_GAMEPLAY parameter of GeneticAgentParameters. Here's a gif of an agent that beat the game:
 
-![Genetic Algorithm Player](git_results/output.gif)
+![Genetic Algorithm Player](git_results/geneticAgent.gif)
