@@ -13,7 +13,8 @@ class GenerationManger():
     def __init__(self, game):
         self.generation_number = 0
         self.score_goal = gen.GOAL_SCORE
-        self.agents = [ NeuralAgent(game, gen.HIDDEN_SIZE) for _ in range(gen.GENERATION_SIZE)]
+        self.generation_size = gen.GENERATION_SIZE
+        self.agents = [ NeuralAgent(game, gen.HIDDEN_SIZE) for _ in range(self.generation_size)]
             
     def rank(self):
         self.agents = sorted(self.agents, key=lambda agent: agent.score, reverse=True)
@@ -21,23 +22,16 @@ class GenerationManger():
     def mutate(self):
         for i in range(len(self.agents)):
             self.agents[i].reset_score()
-            if i < 25:
-                pass
-            elif i < 50:
-                self.agents[i].mutate(0.01)
-            elif i < 75:
-                self.agents[i].mutate(0.03)
-            else:
-                self.agents[i].mutate(0.09)
-             
-    def update_generation(self):
-        self.rank()
-        self.save_nn()
-        self.mutate()
+            for j in range(len(gen.MUTATIONS_RATE) - 1):
+                if i < int(self.generation_size * gen.MUTATION_DISTRIBUTION[j + 1]) and i >= int(self.generation_size * gen.MUTATION_DISTRIBUTION[j]):
+                    self.agents[i].mutate(gen.MUTATIONS_RATE[j])
+                    break
+                if j == len(gen.MUTATIONS_RATE) - 2:
+                    self.agents[i].mutate(gen.MUTATIONS_RATE[-1])
+                    break
         
     def print_results(self):
-        print('')
-        print("Generation ", self.generation_number)
+        print("\nGeneration ", self.generation_number)
         print(f"The best score is {self.agents[0].score}")
         average_score = sum(agent.score for agent in self.agents) / len(self.agents)
         average_score_25_best = sum(self.agents[i].score for i in range(25)) / 25
@@ -71,7 +65,7 @@ class GenerationManger():
             self.best_score = max(self.best_score, self.agents[0].score)
             if self.best_score >= gen.GOAL_SCORE:
                 if not self.test_best_score() : self.best_score -= 1
-            self.save_nn()
+            # self.save_nn() 
             self.print_results()
             self.mutate()
         self.print_message_end_training()
@@ -215,7 +209,7 @@ if __name__ == "__main__":
     
     generation_manager = GenerationManger(game)
     
-    # generation_manager.train()
+    generation_manager.train()
     
     best_agent = NeuralAgent(game, gen.HIDDEN_SIZE)
     best_model_path = "genetic_nn/best_nn/score_50.pt"

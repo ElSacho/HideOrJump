@@ -66,3 +66,9 @@ class GeneticAgentParameters:
     MAX_GEN_NUMBER = 200
     
     GENETIC_PATH = '/Users/potosacho/Desktop/Projets/AI/Moi/HideOrJump/genetic_nn'
+    
+    # Mutation paramaters
+    MUTATION_DISTRIBUTION = [0, 0.25, 0.50, 0.75] # The pourcentage to mutation our agents
+    MUTATIONS_RATE = [0, 0.2, 0.4, 0.9] # The corresponding mutation rate 
+    # Working as " if agent_position > MUTATION_DISTRIBUTION[j] then mutate at the MUTATIONS_RATE[j] and break"
+    
