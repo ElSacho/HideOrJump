@@ -26,11 +26,17 @@ class Colors:
 class GameParameters:
     # General parameters
     BLOCK_SIZE = 20
-    SPEED = 60
+    SPEED = 1000
+    
+    # Rendering parameters (to save the gameplay)
+    RENDER_GAMEPLAY = False
+    RENDER_FOLDER = "renders"
+    
     
     # Speed in the game
     INITIAL_SPEED = 20
-    MAX_SPEED = 50
+    MAX_SPEED = 3000
+    MAX_LEARNING_SPEED = 50 # To normalize the speed for the state, but still able to change its values
     
     # Screen parameters
     WIDTH = 680

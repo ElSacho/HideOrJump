@@ -5,6 +5,10 @@ from obstacles import Obstacles
 from player import Player
 from floor import Floor
 import numpy as np
+from PIL import Image
+import os
+import ffmpeg
+import shutil
 
 
 class GameAI:
@@ -56,7 +60,8 @@ class GameAI:
     def get_state(self):
         obstacles_state = self.obstacles.get_state()
         player_state = self.player.get_state()
-        general_state = np.array([self.speed / GameParameters.MAX_SPEED])
+        general_state = np.array([self.speed / GameParameters.MAX_LEARNING_SPEED])
+        # general_state = np.array([self.speed / 50])
         
         self.state = np.concatenate((obstacles_state, player_state, general_state))
         
@@ -83,7 +88,10 @@ class GameAI:
         
         pygame.display.flip()
         pygame.display.update()
-        
+
+        if GameParameters.RENDER_GAMEPLAY:
+            self.capture_frame()
+ 
     def draw_score(self):
         # Afficher le texte    
         self.screen.blit(self.police.render(f'Score : {self.score}', True, Colors.POLICE_COLOR), (50,50))
@@ -92,20 +100,29 @@ class GameAI:
         np.set_printoptions(precision=2)
         self.screen.blit(self.police.render(f'State : {self.state}', True, Colors.POLICE_COLOR), (50,30))
         
-        
-if __name__ == '__main__':
-    pygame.init()
-    
-    game = GameAI()
-    
-    #game loop
-    while True:
-        action = random.randint(0,2)
-        action = game.player.get_actions()[action]
-        
-        next_state, reward, game_over, dict = game.step(action)
+    def start_video(self, name):
+        self.image_folder = name
+        os.makedirs(self.image_folder, exist_ok=True)
+        self.frame_number = 0
+                
+    def make_video(self, name):
+        if not os.path.exists(GameParameters.RENDER_FOLDER):
+            os.makedirs(GameParameters.RENDER_FOLDER)
 
-        if game_over == True:
-            game.reset() 
-                           
-    pygame.quit()
+        (
+            ffmpeg
+            .input(os.path.join(self.image_folder, 'frame_%04d.png'), framerate=25)
+            .output(os.path.join(GameParameters.RENDER_FOLDER, name), vcodec='libx264', pix_fmt='yuv420p')
+            .run()
+        )
+        
+        shutil.rmtree(self.image_folder)
+        
+    def capture_frame(self):
+        pygame.display.flip()
+        data = pygame.surfarray.array3d(pygame.display.get_surface())
+        data = data.transpose(1,0,2)
+        img = Image.fromarray(data, 'RGB')
+        img.save(os.path.join(self.image_folder, f'frame_{self.frame_number:04d}.png'))
+        self.frame_number += 1
+     

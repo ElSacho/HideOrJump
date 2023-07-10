@@ -2,3 +2,6 @@
 
 assets/
 genetic_nn/all_nn
+
+*.png
+renders/

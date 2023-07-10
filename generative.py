@@ -3,11 +3,13 @@ from torch import nn
 import torch.nn.functional as F
 import random
 from utils import GeneticAgentParameters as gen
+from utils import GameParameters
 from gameAI import GameAI
 import numpy as np
 import pygame
 import os
 from tqdm import tqdm 
+import cv2
 
 class GenerationManger():
     def __init__(self, game):
@@ -174,7 +176,13 @@ class NeuralAgent(nn.Module):
         for seed_value in tqdm(range(1, 20)):
             random.seed(seed_value)
             self.score = 0
-            self.play_one_game(draw = draw)
+            if draw and GameParameters.RENDER_GAMEPLAY:
+                # Libérez les ressources et fermez les fenêtres
+                self.game.start_video(f'OutputTestAgentInWorld{seed_value}')
+                self.play_one_game(draw = draw)
+                self.game.make_video(f'OutputTestAgentInWorld{seed_value}.mp4')
+            else:
+                self.play_one_game(draw = draw)
             print(self.score)
             if self.score < gen.GOAL_SCORE:
                 print("Testing failed")
@@ -209,14 +217,15 @@ if __name__ == "__main__":
     
     generation_manager = GenerationManger(game)
     
-    generation_manager.train()
+    # generation_manager.train()
     
     best_agent = NeuralAgent(game, gen.HIDDEN_SIZE)
     best_model_path = "genetic_nn/best_nn/score_50.pt"
     best_agent.load_model( best_model_path )
     
+    draw_test = True
     # print(best_agent.test_agent(draw = False))
-    print(best_agent.test_agent(draw = True))
+    print(best_agent.test_agent(draw = draw_test))
 
 
     
