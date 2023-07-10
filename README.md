@@ -44,7 +44,7 @@ Le score que nous souhaitons atteindre est de 50 points.
 The code for the genetic algorithm is available in the "genetic.py" file. The parameters of this code are also available in the utils file, in the "GeneticAgentParameters" class. 
 This code is made up of two classes:
 - a NeuralAgent class, corresponding to a single agent playing the game. This class is mainly composed of a neural network that enables play at each stage, and a score that saves rewards at the end of the game. 
-- another GenerationManager, which stores all the agents and makes them evolve.
+- a GenerationManager class, which stores all the agents and makes them evolve.
 
 Learning works as follows:
 1. Play all agents
